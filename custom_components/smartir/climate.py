@@ -30,6 +30,7 @@ CONF_UNIQUE_ID = 'unique_id'
 CONF_DEVICE_CODE = 'device_code'
 CONF_CONTROLLER_DATA = "controller_data"
 CONF_DELAY = "delay"
+CONF_MQTT = "mqtt"
 CONF_TEMPERATURE_SENSOR = 'temperature_sensor'
 CONF_HUMIDITY_SENSOR = 'humidity_sensor'
 CONF_POWER_SENSOR = 'power_sensor'
@@ -49,6 +50,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_TEMPERATURE_SENSOR): cv.entity_id,
     vol.Optional(CONF_HUMIDITY_SENSOR): cv.entity_id,
     vol.Optional(CONF_POWER_SENSOR): cv.entity_id,
+    vol.Optional(CONF_MQTT, default=False): cv.boolean,
     vol.Optional(CONF_POWER_SENSOR_RESTORE_STATE, default=False): cv.boolean
 })
 
@@ -100,6 +102,7 @@ class SmartIRClimate(ClimateEntity, RestoreEntity):
         self._device_code = config.get(CONF_DEVICE_CODE)
         self._controller_data = config.get(CONF_CONTROLLER_DATA)
         self._delay = config.get(CONF_DELAY)
+        self._mqtt = config.get(CONF_MQTT)
         self._temperature_sensor = config.get(CONF_TEMPERATURE_SENSOR)
         self._humidity_sensor = config.get(CONF_HUMIDITY_SENSOR)
         self._power_sensor = config.get(CONF_POWER_SENSOR)
@@ -107,7 +110,10 @@ class SmartIRClimate(ClimateEntity, RestoreEntity):
 
         self._manufacturer = device_data['manufacturer']
         self._supported_models = device_data['supportedModels']
-        self._supported_controller = device_data['supportedController']
+        if(self._mqtt == True):
+            self._supported_controller = "MQTT"
+        else:
+            self._supported_controller = device_data['supportedController']
         self._commands_encoding = device_data['commandsEncoding']
         self._min_temperature = device_data['minTemperature']
         self._max_temperature = device_data['maxTemperature']

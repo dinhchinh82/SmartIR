@@ -1,14 +1,14 @@
 {
   "domain": "smartir",
   "name": "SmartIR",
-  "documentation": "https://github.com/smartHomeHub/SmartIR",
+  "documentation": "https://github.com/dinhchinh82/SmartIR",
   "dependencies": [],
   "codeowners": ["@smartHomeHub"],
   "requirements": ["aiofiles==0.6.0"],
   "homeassistant": "0.115.0",
-  "version": "1.16.1",
+  "version": "1.16.2",
   "updater": {
-    "version": "1.16.1",
+    "version": "1.16.2",
     "releaseNotes": "-- Add version key to manifest file",
     "files": [
       "__init__.py",

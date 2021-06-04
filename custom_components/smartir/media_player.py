@@ -28,6 +28,7 @@ CONF_UNIQUE_ID = 'unique_id'
 CONF_DEVICE_CODE = 'device_code'
 CONF_CONTROLLER_DATA = "controller_data"
 CONF_DELAY = "delay"
+CONF_MQTT = "mqtt"
 CONF_POWER_SENSOR = 'power_sensor'
 CONF_SOURCE_NAMES = 'source_names'
 CONF_DEVICE_CLASS = 'device_class'
@@ -38,6 +39,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_DEVICE_CODE): cv.positive_int,
     vol.Required(CONF_CONTROLLER_DATA): cv.string,
     vol.Optional(CONF_DELAY, default=DEFAULT_DELAY): cv.string,
+    vol.Optional(CONF_MQTT, default=False):cv.boolean,
     vol.Optional(CONF_POWER_SENSOR): cv.entity_id,
     vol.Optional(CONF_SOURCE_NAMES): dict,
     vol.Optional(CONF_DEVICE_CLASS, default=DEFAULT_DEVICE_CLASS): cv.string
@@ -91,11 +93,15 @@ class SmartIRMediaPlayer(MediaPlayerEntity, RestoreEntity):
         self._device_code = config.get(CONF_DEVICE_CODE)
         self._controller_data = config.get(CONF_CONTROLLER_DATA)
         self._delay = config.get(CONF_DELAY)
+        self._mqtt = config.get(CONF_MQTT)
         self._power_sensor = config.get(CONF_POWER_SENSOR)
 
         self._manufacturer = device_data['manufacturer']
         self._supported_models = device_data['supportedModels']
-        self._supported_controller = device_data['supportedController']
+        if(self._mqtt == True):
+            self._supported_controller = "MQTT"
+        else:
+            self._supported_controller = device_data['supportedController']
         self._commands_encoding = device_data['commandsEncoding']
         self._commands = device_data['commands']
 
